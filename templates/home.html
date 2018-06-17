@@ -1,0 +1,44 @@
+<html>
+	<head>
+		<title>TO-DO App</title>
+		<link href="static/css/style.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="header">
+			<h1>TO-DO List</h1>
+			
+
+			<hr class="divider">
+		</div>
+		<table align="center">
+			{% for item in items %}
+				<tr>
+					<td>
+						<form method="POST" action="./delete">
+							<input type="checkbox" value="Delete">
+						</form>
+					</td>
+					<td>
+						<form method="POST" action="./update">
+							<input type="hidden" value="{{item.task}}" name="oldtask">
+							<input type="text" value="{{item.task}}" name="newtask">
+							<input type="submit" value="Update">
+						</form>
+					</td>
+					<td>
+						<form method="POST" action="./delete">
+							<input type="hidden" value="{{item.task}}" name="task">
+							<input type="submit" value="Delete">
+						</form>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+		<div class="add_item">
+			<form method="POST" action="/">
+				<input type="text" name="task">
+				<input type="submit" value="Add">
+			</form>
+		</div>
+	</body>
+</html>
