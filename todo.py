@@ -4,8 +4,10 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import redirect
+from flask import url_for
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import IntegrityError
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 database_file = "sqlite:///{}".format(os.path.join(project_dir, "database.db"))
@@ -24,9 +26,16 @@ class Item(db.Model):
 @app.route("/", methods=["GET", "POST"])
 def home():
 	if request.form:
-		item = Item(task=request.form.get("task"))
-		db.session.add(item)
-		db.session.commit()
+		try:
+			item = Item(task=request.form.get("task"))
+			db.session.add(item)
+			db.session.commit()
+		except IntegrityError:
+			db.session.rollback()
+			items = Item.query.all()
+			error=True
+			return render_template("home.html", items=items, error=error)
+
 	items = Item.query.all()
 	return render_template("home.html", items=items)
   
@@ -34,9 +43,14 @@ def home():
 def update():
 	newtask = request.form.get("newtask")
 	oldtask = request.form.get("oldtask")
-	item = Item.query.filter_by(task=oldtask).first()
-	item.task = newtask
-	db.session.commit()
+	try:
+		item = Item.query.filter_by(task=oldtask).first()
+		item.task = newtask
+		db.session.commit()
+	except IntegrityError:
+		error=True
+		return redirect(url_for(".home", error=error))
+
 	return redirect("/")
 
 @app.route("/delete", methods=["POST"])
