@@ -25,19 +25,33 @@ class Item(db.Model):
 
 @app.route("/", methods=["GET", "POST"])
 def home():
+	error = request.args.get('error', False) # check for error, if no error then set to False
 	if request.form:
-		try:
-			item = Item(task=request.form.get("task"))
-			db.session.add(item)
-			db.session.commit()
-		except IntegrityError:
-			db.session.rollback()
-			items = Item.query.all()
-			error=True
-			return render_template("home.html", items=items, error=error)
+		# check if update or add
+		task = request.form.get("task", None)
+
+		if task: # if task is not None, then it is add
+			try:
+				item = Item(task=request.form.get("task"))
+				db.session.add(item)
+				db.session.commit()
+			except IntegrityError:
+				db.session.rollback()
+				error = True
+		else:
+			newtask = request.form.get("newtask")
+			oldtask = request.form.get("oldtask")
+
+			try:
+				item = Item.query.filter_by(task=oldtask).first()
+				item.task = newtask
+				db.session.commit()
+			except IntegrityError:
+				db.session.rollback()
+				error = True
 
 	items = Item.query.all()
-	return render_template("home.html", items=items)
+	return render_template("home.html", items=items, error=error)
   
 @app.route("/update", methods=["POST"])
 def update():

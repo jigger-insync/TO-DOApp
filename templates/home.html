@@ -6,73 +6,66 @@
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.2/semantic.min.js"></script>
 	</head>
+
 	<body>
 		<div class="wrapper">
-		<div class="header-body">
-			<h1 class="ui center aligned header-body">TO-DO List</h1>
-			<div class="ui divider"></div>
-		</div>
-		<div class="list">
-			<table align="center">
-				{% for item in items %}
-					<tr>
-						<td>
-							<form>
-							<div class="ui checkbox">
-								<input name="example" type="checkbox">
-								<label></label>
-							</div>
-							</form>
-						</td>
-						<td>
-							<form method="POST" action="./update">
-								<div class="ui transparent input list-item">
-								<input type="hidden" value="{{item.task}}" name="oldtask">
-								<input type="text" value="{{item.task}}" name="newtask">
+			<div class="header-body">
+				<h1 class="ui center aligned header-body">TO-DO List</h1>
+				<div class="ui divider"></div>
+			</div>
+			<div class="list">
+				<table align="center">
+					{% for item in items %}
+						<tr>
+							<td>
+								<form>
+								<div class="ui checkbox">
+									<input name="example" type="checkbox">
+									<label></label>
 								</div>
-							</form>
-						</td>
-						<td>
-							<form method="POST" action="./delete">
-								<input type="hidden" value="{{item.task}}" name="task">
-								<button class="ui icon button">
-									<i class="times icon"></i>
-								</button>
-							</form>
-						</td>
-					</tr>
-				{% endfor %}
-			</table>
-			<div class="add-item" align="center">
-			<form method="POST" action="/">
-				<div class="ui transparent action input">
-					<input placeholder="Add item" type="text" name="task">
-					<button class="ui icon button">
-						<i class="add icon"></i>
-					</button>
+								</form>
+							</td>
+							<td>
+								<form method="POST" action="/">
+									<div class="ui transparent input list-item">
+									<input type="hidden" value="{{item.task}}" name="oldtask">
+									<input type="text" value="{{item.task}}" name="newtask">
+									</div>
+								</form>
+							</td>
+							<td>
+								<form method="POST" action="./delete">
+									<input type="hidden" value="{{item.task}}" name="task">
+									<button class="ui icon button">
+										<i class="times icon"></i>
+									</button>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</table>
+				<div class="add-item" align="center">
+				<form method="POST" action="/">
+					<div class="ui transparent action input">
+						<input placeholder="Add item" type="text" name="task">
+						<button class="ui icon button">
+							<i class="add icon"></i>
+						</button>
+					</div>
+				</form>
 				</div>
-			</form>
+				{% if error %}
+				<div class="ui negative message">
+				  <i class="close icon"></i>
+				  <div class="header">
+				    Item already exists
+				  </div>
+				</div>
+				{% endif %}
 			</div>
-			{% if error %}
-			<div class="ui negative message">
-			  <i class="close icon"></i>
-			  <div class="header">
-			    Item already exists
-			  </div>
-			</div>
-			{% endif %}
 		</div>
-		<!-- <div class="add_item">
-			<form method="POST" action="/">
-				<input type="text" name="task">
-				<input type="submit" value="Add">
-			</form>
-		</div> -->
-		<!-- <div class="add_item">
-		
-		</div> -->
-		</div>
-<script type="text/javascript">
+
+		<script type="text/javascript">
 			$('.message .close')
 				.on('click', function() {
 					$(this)
@@ -82,6 +75,6 @@
 				})
 			;
 		</script>
-		
+
 	</body>
 </html>
