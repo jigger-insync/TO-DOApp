@@ -18,7 +18,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 db = SQLAlchemy(app)
 
 class Item(db.Model):
-    task = db.Column(db.String(80), unique=True, nullable=False, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    task = db.Column(db.String(80), unique=True, nullable=False)
+    complete = db.Column(db.Boolean)
 
     def __repr__(self):
         return "<Task: {}>".format(self.task)
@@ -52,21 +54,7 @@ def home():
 
 	items = Item.query.all()
 	return render_template("home.html", items=items, error=error)
-  
-@app.route("/update", methods=["POST"])
-def update():
-	newtask = request.form.get("newtask")
-	oldtask = request.form.get("oldtask")
-	try:
-		item = Item.query.filter_by(task=oldtask).first()
-		item.task = newtask
-		db.session.commit()
-	except IntegrityError:
-		error=True
-		return redirect(url_for(".home", error=error))
-
-	return redirect("/")
-
+	
 @app.route("/delete", methods=["POST"])
 def delete():
 	task = request.form.get("task")

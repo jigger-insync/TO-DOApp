@@ -5,6 +5,8 @@
 		<link href="static/css/style.css" rel="stylesheet">
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.2/semantic.min.js"></script>
+		<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script> -->
+		<script type="text/javascript" src="static/js/main.js"></script>
 	</head>
 
 	<body>
@@ -18,16 +20,16 @@
 					{% for item in items %}
 						<tr>
 							<td>
-								<form>
+								<form method="POST" action="/">
 								<div class="ui checkbox">
-									<input name="example" type="checkbox">
+									<input name="checked" type="checkbox">
 									<label></label>
 								</div>
 								</form>
 							</td>
 							<td>
 								<form method="POST" action="/">
-									<div class="ui transparent input list-item">
+									<div class="ui transparent input list-item" data-content="Edit" data-variation="tiny" data-position="top center">
 									<input type="hidden" value="{{item.task}}" name="oldtask">
 									<input type="text" value="{{item.task}}" name="newtask">
 									</div>
@@ -44,16 +46,27 @@
 						</tr>
 					{% endfor %}
 				</table>
-				<div class="add-item" align="center">
-				<form method="POST" action="/">
-					<div class="ui transparent action input">
-						<input placeholder="Add item" type="text" name="task">
-						<button class="ui icon button">
-							<i class="add icon"></i>
-						</button>
-					</div>
-				</form>
-				</div>
+				<table align="center">
+					<tr>
+						<td>
+							<form>
+								<i style="padding-right: 20px; color: #A9A9A9;" class="plus icon"></i>
+							</form>
+						</td>
+						<td>
+							<div class="add-item" align="center">
+								<form method="POST" action="/">
+									<div class="ui transparent action input">
+										<input style="width: 180px" placeholder="Add item" type="text" name="task">
+										<button class="ui icon button">
+											<i class="add icon"></i>
+										</button>
+									</div>
+								</form>
+							</div>
+						</td>
+					</tr>
+				</table>
 				{% if error %}
 				<div class="ui negative message">
 				  <i class="close icon"></i>
@@ -74,6 +87,9 @@
 					;
 				})
 			;
+		</script>
+		<script type="text/javascript">
+			$(".ui.transparent.input.list-item").popup();
 		</script>
 
 	</body>

@@ -36,9 +36,10 @@ body {
 	grid-row: 2/3;
 	background: #f8f8f8;
 	padding: 2em;
+	border-radius: 20px;
 }
 
-/*.add_item {
-	grid-column: 2/3;
-	grid-row: 3/4;
-}*/
+.ui.transparent.input.list-item > input[type=text]:focus {
+	outline:solid 1px #A9A9A9;
+	padding: 5px !important;
+}
