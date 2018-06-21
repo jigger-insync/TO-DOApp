@@ -21,14 +21,6 @@
 						<tr>
 							<td>
 								<form method="POST" action="/">
-								<div class="ui checkbox">
-									<input name="checked" type="checkbox">
-									<label></label>
-								</div>
-								</form>
-							</td>
-							<td>
-								<form method="POST" action="/">
 									<div class="ui transparent input list-item" data-content="Edit" data-variation="tiny" data-position="top center">
 									<input type="hidden" value="{{item.task}}" name="oldtask">
 									<input type="text" value="{{item.task}}" name="newtask">
@@ -37,6 +29,14 @@
 							</td>
 							<td>
 								<form method="POST" action="./delete">
+									<input type="hidden" value="{{item.task}}" name="task">
+									<button class="ui icon button">
+										<i class="check icon"></i>
+									</button>
+								</form>
+							</td>
+							<td>
+								<form method="POST" action="./absdelete">
 									<input type="hidden" value="{{item.task}}" name="task">
 									<button class="ui icon button">
 										<i class="times icon"></i>
@@ -48,16 +48,16 @@
 				</table>
 				<table align="center">
 					<tr>
-						<td>
+						<!-- <td>
 							<form>
 								<i style="padding-right: 20px; color: #A9A9A9;" class="plus icon"></i>
 							</form>
-						</td>
+						</td> -->
 						<td>
 							<div class="add-item" align="center">
 								<form method="POST" action="/">
 									<div class="ui transparent action input">
-										<input style="width: 180px" placeholder="Add item" type="text" name="task">
+										<input style="width: 175px" placeholder="Add item" type="text" name="task">
 										<button class="ui icon button">
 											<i class="add icon"></i>
 										</button>
@@ -75,6 +75,41 @@
 				  </div>
 				</div>
 				{% endif %}
+				<table align="center">
+					<h4 align="center" style="color: #aaa">Completed</h4>
+					{% for item2 in items2 %}
+						<tr>
+							<td>
+								<form method="POST" action="/">
+								<i class="check icon" style="color: #ccc"></i>
+								</form>
+							</td>
+							<td>
+								<form method="POST" action="/">
+									<div class="ui transparent input list-item">
+									<input style="color: #ccc" type="text" value="{{item2.task}}" name="newtask">
+									</div>
+								</form>
+							</td>
+							<td>
+								<form method="POST" action="/">
+									<input type="hidden" value="{{item2.task}}" name="task">
+									<button class="ui icon button">
+										<i class="undo icon"></i>
+									</button>
+								</form>
+							</td>
+							<td>
+								<form method="POST" action="/absdelete1">
+									<input type="hidden" value="{{item2.task}}" name="task">
+									<button class="ui icon button">
+										<i class="times icon"></i>
+									</button>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</table>
 			</div>
 		</div>
 

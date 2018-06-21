@@ -25,6 +25,14 @@ class Item(db.Model):
     def __repr__(self):
         return "<Task: {}>".format(self.task)
 
+class ItemComplete(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    task = db.Column(db.String(80), unique=True, nullable=False)
+    complete = db.Column(db.Boolean)
+
+    def __repr__(self):
+        return "<Task: {}>".format(self.task)
+
 @app.route("/", methods=["GET", "POST"])
 def home():
 	error = request.args.get('error', False) # check for error, if no error then set to False
@@ -37,9 +45,19 @@ def home():
 				item = Item(task=request.form.get("task"))
 				db.session.add(item)
 				db.session.commit()
+				task = request.form.get("task")
+
+				try:
+					item2 = ItemComplete.query.filter_by(task=task).first()
+					db.session.delete(item2)
+					db.session.commit()
+				except:
+					pass
+
 			except IntegrityError:
 				db.session.rollback()
 				error = True
+
 		else:
 			newtask = request.form.get("newtask")
 			oldtask = request.form.get("oldtask")
@@ -53,7 +71,8 @@ def home():
 				error = True
 
 	items = Item.query.all()
-	return render_template("home.html", items=items, error=error)
+	items2 = ItemComplete.query.all()
+	return render_template("home.html", items=items, items2= items2, error=error)
 	
 @app.route("/delete", methods=["POST"])
 def delete():
@@ -61,4 +80,27 @@ def delete():
 	item = Item.query.filter_by(task=task).first()
 	db.session.delete(item)
 	db.session.commit()
+
+	item2 = ItemComplete(task=request.form.get("task"))
+	db.session.add(item2)
+	db.session.commit()
+
+	return redirect("/")
+
+@app.route("/absdelete", methods=["POST"])
+def absdelete():
+	task = request.form.get("task")
+	item = Item.query.filter_by(task=task).first()
+	db.session.delete(item)
+	db.session.commit()
+
+	return redirect("/")
+
+@app.route("/absdelete1", methods=["POST"])
+def absdelete1():
+	task = request.form.get("task")
+	item2 = ItemComplete.query.filter_by(task=task).first()
+	db.session.delete(item2)
+	db.session.commit()
+
 	return redirect("/")
